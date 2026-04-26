@@ -1,0 +1,4 @@
+DISCORD_WEBHOOK_URL=your_webhook_here
+DISCORD_BOT_TOKEN=optional_if_you_use_bot_client
+FINNHUB_API_KEY=your_key
+ALPHAVANTAGE_API_KEY=your_key
