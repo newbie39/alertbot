@@ -1,4 +1,4 @@
-import { fetchPrices } from "../api/yahoo";
+import { fetchPrices } from "../api/twelvedata";
 import { Client, GatewayIntentBits } from "discord.js";
 import { sendDiscordAlert } from "./webhook";
 
