@@ -1,8 +1,4 @@
-import { REST, Routes } from "@discordjs/rest";
-import { SlashCommandBuilder } from "discord.js";
-import dotenv from "dotenv";
-
-dotenv.config();
+import { REST, Routes, SlashCommandBuilder } from "discord.js";
 
 export async function registerSlashCommands() {
   const token = process.env.DISCORD_BOT_TOKEN;
@@ -46,3 +42,4 @@ export async function registerSlashCommands() {
     console.error("❌ Error registering slash commands:", err);
   }
 }
+
