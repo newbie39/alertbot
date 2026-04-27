@@ -17,6 +17,56 @@ export function initBotClient() {
     console.log(`🤖 Logged in as ${client.user?.tag}`);
   });
 
+  client.on("interactionCreate", async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
+  // /price
+  if (interaction.commandName === "price") {
+    const ticker = interaction.options.getString("ticker")!.toUpperCase();
+
+    try {
+      const quotes = await fetchPrices([ticker]);
+      const q = quotes[0];
+
+      if (!q) {
+        await interaction.reply(`❌ Unknown ticker: ${ticker}`);
+        return;
+      }
+
+      await interaction.reply(
+        `📈 **${ticker}**\nPrice: **$${q.regularMarketPrice}**\nPrev Close: **$${q.regularMarketPreviousClose}**`
+      );
+    } catch (err) {
+      console.error(err);
+      await interaction.reply("❌ Error fetching price.");
+    }
+  }
+
+  // /status
+  if (interaction.commandName === "status") {
+    const uptimeSeconds = Math.floor(process.uptime());
+    const uptimeMinutes = Math.floor(uptimeSeconds / 60);
+
+    await interaction.reply(
+      `🤖 **Bot Status**\n` +
+      `• Uptime: ${uptimeMinutes} minutes\n` +
+      `• Alerts running every 5 minutes\n` +
+      `• Webhook + Bot client active`
+    );
+  }
+
+  // /help
+  if (interaction.commandName === "help") {
+    await interaction.reply(
+      "**📘 Bot Commands**\n" +
+      "`/price <TICKER>` — Get live stock price\n" +
+      "`/status` — Bot health + uptime\n" +
+      "`/help` — Show this help menu"
+    );
+  }
+});
+
+  
   client.on("messageCreate", async (msg) => {
   if (msg.author.bot) return;
 
