@@ -1,5 +1,5 @@
 import { SP500_TICKERS } from "../data/sp500";
-import { fetchPrices } from "../api/yahoo";
+import { fetchPrices } from "../api/twelvedata";
 import { sendDiscordAlert } from "../discord/webhook";
 
 const BATCH_SIZE = 50;
