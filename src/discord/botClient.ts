@@ -22,30 +22,32 @@ export function initBotClient() {
 
   // /price
   if (interaction.commandName === "price") {
-    console.log("PRICE COMMAND FIRED");
+  const ticker = interaction.options.getString("ticker")!.toUpperCase();
 
-    const ticker = interaction.options.getString("ticker")!.toUpperCase();
-    console.log("TICKER:", ticker);
+  // Step 1 — acknowledge immediately
+  await interaction.deferReply();
 
-    try {
-      const quotes = await fetchPrices([ticker]);
-      console.log("QUOTES:", quotes);
+  try {
+    const quotes = await fetchPrices([ticker]);
+    const q = quotes[0];
 
-      const q = quotes[0];
-
-      if (!q) {
-        await interaction.reply(`❌ Unknown ticker: ${ticker}`);
-        return;
-      }
-
-      await interaction.reply(
-        `📈 **${ticker}**\nPrice: **$${q.regularMarketPrice}**\nPrev Close: **$${q.regularMarketPreviousClose}**`
-      );
-    } catch (err) {
-      console.error(err);
-      await interaction.reply("❌ Error fetching price.");
+    if (!q) {
+      await interaction.editReply(`❌ Unknown ticker: ${ticker}`);
+      return;
     }
+
+    // Step 3 — edit the deferred reply
+    await interaction.editReply(
+      `📈 **${ticker}**\n` +
+      `Price: **$${q.regularMarketPrice}**\n` +
+      `Prev Close: **$${q.regularMarketPreviousClose}**`
+    );
+  } catch (err) {
+    console.error(err);
+    await interaction.editReply("❌ Error fetching price.");
   }
+}
+
 
   // /status
   if (interaction.commandName === "status") {
