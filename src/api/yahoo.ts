@@ -11,6 +11,7 @@ export async function fetchPrices(tickers: string[]) {
     try {
       const { data } = await axios.get(url);
 
+      // Twelve Data returns { status: "error" } for invalid tickers
       if (data.status === "error") {
         console.error("TwelveData error:", data.message);
         continue;
@@ -29,4 +30,3 @@ export async function fetchPrices(tickers: string[]) {
 
   return results;
 }
-
