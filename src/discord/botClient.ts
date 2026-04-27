@@ -22,16 +22,30 @@ export function initBotClient() {
 
   // /price
   if (interaction.commandName === "price") {
-  console.log("PRICE COMMAND FIRED");
+    console.log("PRICE COMMAND FIRED");
 
-  const ticker = interaction.options.getString("ticker")!.toUpperCase();
-  console.log("TICKER:", ticker);
+    const ticker = interaction.options.getString("ticker")!.toUpperCase();
+    console.log("TICKER:", ticker);
 
-  try {
-    const quotes = await fetchPrices([ticker]);
-    console.log("QUOTES:", quotes);
+    try {
+      const quotes = await fetchPrices([ticker]);
+      console.log("QUOTES:", quotes);
 
-    const q = quotes[0];
+      const q = quotes[0];
+
+      if (!q) {
+        await interaction.reply(`❌ Unknown ticker: ${ticker}`);
+        return;
+      }
+
+      await interaction.reply(
+        `📈 **${ticker}**\nPrice: **$${q.regularMarketPrice}**\nPrev Close: **$${q.regularMarketPreviousClose}**`
+      );
+    } catch (err) {
+      console.error(err);
+      await interaction.reply("❌ Error fetching price.");
+    }
+  }
 
   // /status
   if (interaction.commandName === "status") {
