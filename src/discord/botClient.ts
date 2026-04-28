@@ -21,10 +21,11 @@ export function initBotClient() {
   if (!interaction.isChatInputCommand()) return;
 
   // /price
+  // /price
   if (interaction.commandName === "price") {
   const ticker = interaction.options.getString("ticker")!.toUpperCase();
 
-  // Step 1 — acknowledge immediately
+  // Acknowledge immediately
   await interaction.deferReply();
 
   try {
@@ -36,7 +37,6 @@ export function initBotClient() {
       return;
     }
 
-    // Step 3 — edit the deferred reply
     await interaction.editReply(
       `📈 **${ticker}**\n` +
       `Price: **$${q.regularMarketPrice}**\n` +
