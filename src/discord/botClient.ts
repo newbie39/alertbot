@@ -1,3 +1,4 @@
+import { EmbedBuilder } from "discord.js";
 import { fetchPrices } from "../api/twelvedata";
 import { Client, GatewayIntentBits } from "discord.js";
 import { sendDiscordAlert } from "./webhook";
