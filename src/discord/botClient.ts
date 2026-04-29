@@ -21,36 +21,32 @@ export function initBotClient() {
   if (!interaction.isChatInputCommand()) return;
 
   // /price
-  // /price
   if (interaction.commandName === "price") {
-  const ticker = interaction.options.getString("ticker")!.toUpperCase();
+    const ticker = interaction.options.getString("ticker")!.toUpperCase();
 
-  // Acknowledge immediately
-  await interaction.deferReply();
+    await interaction.deferReply();
 
-  try {
-    const quotes = await fetchPrices([ticker]);
-    const q = quotes[0];
+    try {
+      const quotes = await fetchPrices([ticker]);
+      const q = quotes[0];
 
-    if (!q) {
-      await interaction.editReply(`❌ Unknown ticker: ${ticker}`);
-      return;
+      if (!q) {
+        await interaction.editReply(`❌ Unknown ticker: ${ticker}`);
+        return;
+      }
+
+      await interaction.editReply(
+        `📈 **${ticker}**\n` +
+        `Price: **$${q.regularMarketPrice}**\n` +
+        `Prev Close: **$${q.regularMarketPreviousClose}**`
+      );
+    } catch (err) {
+      console.error(err);
+      await interaction.editReply("❌ Error fetching price.");
     }
 
-    await interaction.editReply(
-      `📈 **${ticker}**\n` +
-      `Price: **$${q.regularMarketPrice}**\n` +
-      `Prev Close: **$${q.regularMarketPreviousClose}**`
-    );
-  } catch (err) {
-    console.error(err);
-    await interaction.editReply("❌ Error fetching price.");
-  }
-}
-
-
   // /status
-  if (interaction.commandName === "status") {
+  } else if (interaction.commandName === "status") {
     const uptimeSeconds = Math.floor(process.uptime());
     const uptimeMinutes = Math.floor(uptimeSeconds / 60);
 
@@ -60,10 +56,9 @@ export function initBotClient() {
       `• Alerts running every 5 minutes\n` +
       `• Webhook + Bot client active`
     );
-  }
 
   // /help
-  if (interaction.commandName === "help") {
+  } else if (interaction.commandName === "help") {
     await interaction.reply(
       "**📘 Bot Commands**\n" +
       "`/price <TICKER>` — Get live stock price\n" +
