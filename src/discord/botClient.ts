@@ -67,6 +67,39 @@ export function initBotClient() {
     );
   }
 });
+  
+  } else if (interaction.commandName === "flow") {
+  const ticker = interaction.options.getString("ticker")!.toUpperCase();
+  await interaction.deferReply();
+
+  try {
+    const [trend, options] = await Promise.all([
+      getTrendFlow(ticker),
+      getOptionsFlowLite(ticker)
+    ]);
+
+    let msg = `📊 **Flow Report — ${ticker}**\n\n`;
+
+    msg += `📈 **Trend Flow**\n`;
+    msg += `• Price: $${trend.price}\n`;
+    msg += `• Volume: ${trend.volume} (avg ${trend.avgVolume})\n`;
+    msg += `• Momentum: ${trend.momentum}\n`;
+    msg += `• Volatility: ${trend.volatility}\n\n`;
+
+    msg += `🔥 **Options Flow (Lite)**\n`;
+    msg += `• Calls: ${options.calls}\n`;
+    msg += `• Puts: ${options.puts}\n`;
+    msg += `• Call/Put Ratio: ${options.cpr}\n`;
+    msg += `• Most Active Strike: ${options.activeStrike}\n`;
+    msg += `• Most Active Expiration: ${options.activeExpiry}\n`;
+
+    await interaction.editReply(msg);
+
+  } catch (err) {
+    console.error(err);
+    await interaction.editReply("❌ Error generating flow report.");
+  }
+}
 
   
   client.on("messageCreate", async (msg) => {
