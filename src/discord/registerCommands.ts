@@ -19,7 +19,7 @@ export async function registerSlashCommands() {
           .setDescription("Stock ticker (e.g., AAPL)")
           .setRequired(true)
       ),
-
+  
     new SlashCommandBuilder()
       .setName("status")
       .setDescription("Show bot status"),
@@ -28,6 +28,19 @@ export async function registerSlashCommands() {
       .setName("help")
       .setDescription("Show help menu")
   ].map(cmd => cmd.toJSON());
+
+  {
+  name: "flow",
+  description: "Show trend flow + options flow for a ticker",
+  options: [
+    {
+      name: "ticker",
+      description: "Stock ticker",
+      type: 3,
+      required: true
+    }
+  ]
+}
 
   const rest = new REST({ version: "10" }).setToken(token);
 
