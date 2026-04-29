@@ -26,7 +26,6 @@ export function initBotClient() {
   // /price
   if (interaction.commandName === "price") {
     const ticker = interaction.options.getString("ticker")!.toUpperCase();
-
     await interaction.deferReply();
 
     try {
@@ -68,53 +67,54 @@ export function initBotClient() {
       "`/status` — Bot health + uptime\n" +
       "`/help` — Show this help menu"
     );
+
+  // /flow
+  } else if (interaction.commandName === "flow") {
+    const ticker = interaction.options.getString("ticker")!.toUpperCase();
+    await interaction.deferReply();
+
+    try {
+      const [trend, options] = await Promise.all([
+        getTrendFlow(ticker),
+        getOptionsFlowLite(ticker)
+      ]);
+
+      const embed = new EmbedBuilder()
+        .setTitle(`📊 Flow Report — ${ticker}`)
+        .setColor("#4b9cff")
+        .addFields(
+          {
+            name: "📈 Trend Flow",
+            value:
+              `• **Price:** $${trend.price}\n` +
+              `• **Volume:** ${trend.volume} (avg ${trend.avgVolume})\n` +
+              `• **Momentum:** ${trend.momentum}\n` +
+              `• **Volatility:** ${trend.volatility}`,
+            inline: false
+          },
+          {
+            name: "🔥 Options Flow (Lite)",
+            value:
+              `• **Calls:** ${options.calls}\n` +
+              `• **Puts:** ${options.puts}\n` +
+              `• **Call/Put Ratio:** ${options.cpr}\n` +
+              `• **Most Active Strike:** ${options.activeStrike}\n` +
+              `• **Most Active Expiry:** ${options.activeExpiry}`,
+            inline: false
+          }
+        )
+        .setFooter({ text: "Flow data powered by Finnhub + Multi‑API Trend Engine" })
+        .setTimestamp();
+
+      await interaction.editReply({ embeds: [embed] });
+
+    } catch (err) {
+      console.error(err);
+      await interaction.editReply("❌ Error generating flow report.");
+    }
   }
 });
-  
-  } else if (interaction.commandName === "flow") {
-  const ticker = interaction.options.getString("ticker")!.toUpperCase();
-  await interaction.deferReply();
 
-  try {
-    const [trend, options] = await Promise.all([
-      getTrendFlow(ticker),
-      getOptionsFlowLite(ticker)
-    ]);
-
-    const embed = new EmbedBuilder()
-      .setTitle(`📊 Flow Report — ${ticker}`)
-      .setColor("#4b9cff")
-      .addFields(
-        {
-          name: "📈 Trend Flow",
-          value:
-            `• **Price:** $${trend.price}\n` +
-            `• **Volume:** ${trend.volume} (avg ${trend.avgVolume})\n` +
-            `• **Momentum:** ${trend.momentum}\n` +
-            `• **Volatility:** ${trend.volatility}`,
-          inline: false
-        },
-        {
-          name: "🔥 Options Flow (Lite)",
-          value:
-            `• **Calls:** ${options.calls}\n` +
-            `• **Puts:** ${options.puts}\n` +
-            `• **Call/Put Ratio:** ${options.cpr}\n` +
-            `• **Most Active Strike:** ${options.activeStrike}\n` +
-            `• **Most Active Expiry:** ${options.activeExpiry}`,
-          inline: false
-        }
-      )
-      .setFooter({ text: "Flow data powered by Finnhub + Multi‑API Trend Engine" })
-      .setTimestamp();
-
-    await interaction.editReply({ embeds: [embed] });
-
-  } catch (err) {
-    console.error(err);
-    await interaction.editReply("❌ Error generating flow report.");
-  }
-}
 
 
 
