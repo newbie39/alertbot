@@ -117,6 +117,7 @@ export function initBotClient() {
 }
 
 
+
   
   client.on("messageCreate", async (msg) => {
   if (msg.author.bot) return;
