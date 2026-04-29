@@ -40,7 +40,8 @@ export async function registerSlashCommands() {
       required: true
     }
   ]
-}
+},
+
 
   const rest = new REST({ version: "10" }).setToken(token);
 
