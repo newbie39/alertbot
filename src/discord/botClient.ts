@@ -79,28 +79,41 @@ export function initBotClient() {
       getOptionsFlowLite(ticker)
     ]);
 
-    let msg = `📊 **Flow Report — ${ticker}**\n\n`;
+    const embed = new EmbedBuilder()
+      .setTitle(`📊 Flow Report — ${ticker}`)
+      .setColor("#4b9cff")
+      .addFields(
+        {
+          name: "📈 Trend Flow",
+          value:
+            `• **Price:** $${trend.price}\n` +
+            `• **Volume:** ${trend.volume} (avg ${trend.avgVolume})\n` +
+            `• **Momentum:** ${trend.momentum}\n` +
+            `• **Volatility:** ${trend.volatility}`,
+          inline: false
+        },
+        {
+          name: "🔥 Options Flow (Lite)",
+          value:
+            `• **Calls:** ${options.calls}\n` +
+            `• **Puts:** ${options.puts}\n` +
+            `• **Call/Put Ratio:** ${options.cpr}\n` +
+            `• **Most Active Strike:** ${options.activeStrike}\n` +
+            `• **Most Active Expiry:** ${options.activeExpiry}`,
+          inline: false
+        }
+      )
+      .setFooter({ text: "Flow data powered by Finnhub + Multi‑API Trend Engine" })
+      .setTimestamp();
 
-    msg += `📈 **Trend Flow**\n`;
-    msg += `• Price: $${trend.price}\n`;
-    msg += `• Volume: ${trend.volume} (avg ${trend.avgVolume})\n`;
-    msg += `• Momentum: ${trend.momentum}\n`;
-    msg += `• Volatility: ${trend.volatility}\n\n`;
-
-    msg += `🔥 **Options Flow (Lite)**\n`;
-    msg += `• Calls: ${options.calls}\n`;
-    msg += `• Puts: ${options.puts}\n`;
-    msg += `• Call/Put Ratio: ${options.cpr}\n`;
-    msg += `• Most Active Strike: ${options.activeStrike}\n`;
-    msg += `• Most Active Expiration: ${options.activeExpiry}\n`;
-
-    await interaction.editReply(msg);
+    await interaction.editReply({ embeds: [embed] });
 
   } catch (err) {
     console.error(err);
     await interaction.editReply("❌ Error generating flow report.");
   }
 }
+
 
   
   client.on("messageCreate", async (msg) => {
