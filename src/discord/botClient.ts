@@ -1,5 +1,5 @@
 import { getTrendFlow } from "../api/flowTrend";
-import { getOptionsFlowLite } from "../api/flowOptions";
+import { getOptionsFlowYahoo } from "../api/flowOptionsYahoo";
 import { EmbedBuilder } from "discord.js";
 import { fetchPrices } from "../api/twelvedata";
 import { Client, GatewayIntentBits } from "discord.js";
