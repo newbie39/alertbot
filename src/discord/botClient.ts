@@ -1,3 +1,4 @@
+import { analyzeInstitutionalLiquidity } from "../analysis/liquidityAnalyst";
 import { getTrendFlow } from "../api/flowTrend";
 import { getOptionsFlowYahoo } from "../api/flowOptionsYahoo";
 import { EmbedBuilder } from "discord.js";
