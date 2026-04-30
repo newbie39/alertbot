@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function getOptionsFlowLite(ticker: string) {
+export async function getOptionsFlowYahoo(ticker: string) {
   const url = `https://finnhub.io/api/v1/stock/option-chain?symbol=${ticker}&token=${process.env.FINNHUB_API_KEY}`;
 
   try {
