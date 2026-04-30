@@ -3,7 +3,7 @@ import { fetchPrices } from "../api/twelvedata";
 import { sendDiscordAlert } from "../discord/webhook";
 
 const BATCH_SIZE = 50;
-const MOVE_THRESHOLD = 10; // % move to alert on
+const MOVE_THRESHOLD = 3; // % move to alert on
 
 export async function runPriceAlerts() {
   for (let i = 0; i < SP500_TICKERS.length; i += BATCH_SIZE) {
