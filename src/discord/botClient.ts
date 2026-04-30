@@ -76,7 +76,7 @@ export function initBotClient() {
     try {
       const [trend, options] = await Promise.all([
         getTrendFlow(ticker),
-        getOptionsFlowLite(ticker)
+        getOptionsFlowYahoo(ticker)
       ]);
 
       const embed = new EmbedBuilder()
