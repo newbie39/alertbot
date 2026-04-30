@@ -68,7 +68,64 @@ export function initBotClient() {
       "`/status` — Bot health + uptime\n" +
       "`/help` — Show this help menu"
     );
+  
+  //liquidity
+  } else if (interaction.commandName === "liquidity") {
+  await interaction.deferReply();
 
+  // 1. Pull a subset of the S&P 500 (top 50 for speed)
+  const tickers = SP500.slice(0, 50);
+
+  // 2. Fetch price + options data in batches
+  const snapshots = [];
+
+  for (const ticker of tickers) {
+    try {
+      const price = await fetchPrices([ticker]);
+      const opt = await getOptionsFlowYahoo(ticker);
+
+      const quote = price[0];
+      if (!quote) continue;
+
+      const movePct =
+        ((quote.regularMarketPrice - quote.regularMarketPreviousClose) /
+          quote.regularMarketPreviousClose) *
+        100;
+
+      const volumeRel =
+        quote.regularMarketVolume && quote.averageDailyVolume3Month
+          ? quote.regularMarketVolume / quote.averageDailyVolume3Month
+          : 1;
+
+      snapshots.push({
+        ticker,
+        sector: quote.sector || "Unknown",
+        movePct,
+        volumeRel,
+        cpr: opt.cpr === "N/A" ? 1 : Number(opt.cpr)
+      });
+    } catch (err) {
+      console.error("Liquidity snapshot error:", err);
+    }
+  }
+
+  // 3. Run the hedge‑fund style analysis
+  const narrative = analyzeInstitutionalLiquidity(snapshots);
+
+  // 4. Send embed
+  const embed = {
+    title: "📊 Institutional Liquidity Read",
+    description: narrative,
+    color: 0x00aaff,
+    timestamp: new Date().toISOString()
+  };
+
+  await interaction.editReply({ embeds: [embed] });
+);
+  
+
+
+    
   // /flow
   } else if (interaction.commandName === "flow") {
     const ticker = interaction.options.getString("ticker")!.toUpperCase();
