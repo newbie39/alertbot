@@ -1,7 +1,6 @@
 import { SP500_TICKERS } from "../data/sp500";
 import { fetchPrices } from "../api/twelvedata";
 import { sendDiscordAlert } from "../discord/webhook";
-import { getOptionsFlowYahoo } from "../api/flowOptionsYahoo";
 
 const BATCH_SIZE = 50;
 const MOVE_THRESHOLD = 10; // % move to alert on
