@@ -121,10 +121,7 @@ export function initBotClient() {
   };
 
   await interaction.editReply({ embeds: [embed] });
-);
-  
-
-
+}
     
   // /flow
   } else if (interaction.commandName === "flow") {
