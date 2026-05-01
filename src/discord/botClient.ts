@@ -121,8 +121,7 @@ export function initBotClient() {
   };
 
   await interaction.editReply({ embeds: [embed] });
-}
-
+}  // <-- THIS closes the /liquidity block
     
   // /flow
   } else if (interaction.commandName === "flow") {
