@@ -4,7 +4,7 @@ import { getOptionsFlowYahoo } from "../api/flowOptionsYahoo";
 import { EmbedBuilder, Client, GatewayIntentBits } from "discord.js";
 import { fetchPrices } from "../api/twelvedata";
 import { sendDiscordAlert } from "./webhook";
-import { SP500 } from "../data/sp500";
+import { SP500_TICKERS } from "../data/sp500";
 
 export function initBotClient() {
   const token = process.env.DISCORD_BOT_TOKEN;
