@@ -85,7 +85,7 @@ export function initBotClient() {
     } else if (interaction.commandName === "liquidity") {
       await interaction.deferReply();
 
-      const tickers = SP500.slice(0, 50);
+      const tickers = SP500_TICKERS.slice(0, 50);
       const snapshots: any[] = [];
 
       for (const ticker of tickers) {
